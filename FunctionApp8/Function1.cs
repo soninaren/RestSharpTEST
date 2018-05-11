@@ -14,10 +14,13 @@ namespace FunctionApp8
         [FunctionName("Function1")]
         public static void Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
-            var client = new RestClient("http://www.google.com");
+            var client = new RestClient("http://www.google.com")
+            {
+                Authenticator = OAuth1Authenticator.ForRequestToken("", "")
+            };
             var request = new RestRequest(Method.GET);
             request.AddParameter("q", "test");
-            
+
             IRestResponse response = client.Execute(request);
             var content = response.Content;
             log.Info(content);
